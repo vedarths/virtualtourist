@@ -19,15 +19,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-8w-FIE">
-                                <rect key="frame" x="8" y="28" width="359" height="631"/>
+                                <rect key="frame" x="8" y="69" width="359" height="590"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="W1R-sF-10z" appends="YES" id="Jpa-dR-dnm"/>
+                                </connections>
                             </mapView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OI2-tc-Kb4">
+                                <rect key="frame" x="8" y="20" width="359" height="44"/>
+                                <items>
+                                    <navigationItem title="Virtual Tourist" id="eeS-jx-reK" userLabel="Virtual Tourist">
+                                        <barButtonItem key="rightBarButtonItem" title="Edit Pins" id="f8u-6i-sde" userLabel="Edit Pins"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qUM-8w-FIE" secondAttribute="trailing" constant="8" id="9ds-vY-vSe"/>
                             <constraint firstItem="qUM-8w-FIE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="GbT-UO-Nqh"/>
-                            <constraint firstItem="qUM-8w-FIE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="iPL-nh-dZb"/>
+                            <constraint firstItem="OI2-tc-Kb4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="Tm4-g4-uH4"/>
+                            <constraint firstItem="OI2-tc-Kb4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Vlb-ie-kLc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OI2-tc-Kb4" secondAttribute="bottom" constant="603" id="gas-pK-wl2"/>
+                            <constraint firstItem="qUM-8w-FIE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49" id="iPL-nh-dZb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qUM-8w-FIE" secondAttribute="bottom" constant="8" id="rEQ-SV-3WO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OI2-tc-Kb4" secondAttribute="trailing" constant="8" id="uup-WG-AP0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -36,6 +52,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="W1R-sF-10z"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>

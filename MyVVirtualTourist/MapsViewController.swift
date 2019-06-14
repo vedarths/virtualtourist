@@ -15,6 +15,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManager
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapKit.delegate = self
         // Do any additional setup after loading the view, typically from a nib.
         let uiLongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(MKMapView.addAnnotation(_:)))
         uiLongPressGestureRecognizer.minimumPressDuration = 2.0
