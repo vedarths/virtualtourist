@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-8w-FIE">
-                                <rect key="frame" x="8" y="69" width="359" height="590"/>
+                                <rect key="frame" x="8" y="69" width="359" height="555"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="W1R-sF-10z" appends="YES" id="Jpa-dR-dnm"/>
@@ -42,7 +42,7 @@
                             <constraint firstItem="OI2-tc-Kb4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Vlb-ie-kLc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OI2-tc-Kb4" secondAttribute="bottom" constant="603" id="gas-pK-wl2"/>
                             <constraint firstItem="qUM-8w-FIE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49" id="iPL-nh-dZb"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qUM-8w-FIE" secondAttribute="bottom" constant="8" id="rEQ-SV-3WO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qUM-8w-FIE" secondAttribute="bottom" constant="43" id="rEQ-SV-3WO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OI2-tc-Kb4" secondAttribute="trailing" constant="8" id="uup-WG-AP0"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -52,7 +52,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="W1R-sF-10z"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="W1R-sF-10z">
+                    <connections>
+                        <action selector="handleLongPressAction:" destination="BYZ-38-t0r" id="nGM-vI-9af"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>

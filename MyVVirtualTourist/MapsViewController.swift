@@ -8,62 +8,45 @@
 
 import UIKit
 import MapKit
+import CoreData
 
-class MapsViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapsViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapKit: MKMapView!
+    var pinAnnotation: MKPointAnnotation? = nil
+    
+    var dataController:DataController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapKit.delegate = self
-        // Do any additional setup after loading the view, typically from a nib.
-        let uiLongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(MKMapView.addAnnotation(_:)))
-        uiLongPressGestureRecognizer.minimumPressDuration = 2.0
-        mapKit.addGestureRecognizer(uiLongPressGestureRecognizer)
-        
     }
 
+    @IBAction func handleLongPressAction(_ sender: UILongPressGestureRecognizer) {
+       addAnnotation(gestureRecognizer: sender)
+    }
+    
     func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
+        let touchPoint = gestureRecognizer.location(in: mapKit)
+        let newCoordinates = mapKit.convert(touchPoint, toCoordinateFrom: mapKit)
+        
         if gestureRecognizer.state == UIGestureRecognizer.State.began {
-            let touchPoint = gestureRecognizer.location(in: mapKit)
-            let newCoordinates = mapKit.convert(touchPoint, toCoordinateFrom: mapKit)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = newCoordinates
-            CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: newCoordinates.latitude, longitude: newCoordinates.longitude), completionHandler: {(placemarks, error) -> Void in
-                if error != nil {
-                    print("Reverse geo coding failed with error" + (error?.localizedDescription)!)
-                    return
-                }
-                if (placemarks?.count)! > 0 {
-                    let placemark = placemarks![0] as CLPlacemark
-                    annotation.title = placemark.thoroughfare! + ", " + placemark.subThoroughfare!
-                    annotation.subtitle = placemark.subLocality
-                    self.mapKit.addAnnotation(annotation)
-                    print(placemark)
-                } else {
-                    annotation.title = "Unknown Place"
-                    self.mapKit.addAnnotation(annotation)
-                    print("Problem with the data recieved from the geo coder")
-                }
-               // places.append(["name":annotation.title, "latitude":"\(newCoordinates.latitude)", "longitude":"\(newCoordinates.longitude)"])
-            })
+            pinAnnotation = MKPointAnnotation()
+            pinAnnotation!.coordinate = newCoordinates
+            
+            print("\(#function) Coordinate: \(newCoordinates.latitude),\(newCoordinates.longitude)")
+            
+            mapKit.addAnnotation(pinAnnotation!)
+        } else if gestureRecognizer.state == .changed {
+            pinAnnotation!.coordinate = newCoordinates
+        } else if gestureRecognizer.state == .ended {
+            let locationPin = LocationPin(context: dataController.viewContext)
+            locationPin.latitude = String(pinAnnotation!.coordinate.latitude)
+            locationPin.longitude = String(pinAnnotation!.coordinate.longitude)
+            try? dataController.viewContext.save()
         }
     }
-    
-    
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard annotation is MKPointAnnotation else { return nil}
-        let identifier = "Annotation"
-        var annotationView = mapKit.dequeueReusableAnnotationView(withIdentifier: identifier)
-        if annotationView == nil {
-           annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-           annotationView!.canShowCallout = true
-        } else {
-            annotationView!.annotation = annotation
-        }
-        return annotationView
-    }
+   
 }
 
 
