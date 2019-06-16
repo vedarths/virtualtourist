@@ -120,7 +120,6 @@
 				BE05DF8922ABB95A0034D627 /* View */,
 				BE05DF8822ABB9530034D627 /* Model */,
 				BE05DF5722ABB9340034D627 /* AppDelegate.swift */,
-				BE05DF5B22ABB9340034D627 /* Main.storyboard */,
 				BE05DF6122ABB9350034D627 /* Assets.xcassets */,
 				BE05DF6322ABB9350034D627 /* LaunchScreen.storyboard */,
 				BE05DF6622ABB9350034D627 /* Info.plist */,
@@ -175,6 +174,7 @@
 		BE05DF8B22ABB96A0034D627 /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
+				BE05DF5B22ABB9340034D627 /* Main.storyboard */,
 			);
 			path = StoryBoards;
 			sourceTree = "<group>";
