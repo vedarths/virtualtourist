@@ -12,24 +12,28 @@ import CoreData
 class DataController {
     
     let persistentContainer: NSPersistentContainer
+    internal let savingContext: NSManagedObjectContext
+    internal let backgroundContext: NSManagedObjectContext
     
-    var viewContext:NSManagedObjectContext {
-        return persistentContainer.viewContext
+    static func getInstance() -> DataController {
+        struct Singleton {
+            static var instance = DataController(modelName: "Virtual_Tourist")
+        }
+        return Singleton.instance
     }
-    
-    let backgroundContext:NSManagedObjectContext!
     
     init(modelName: String) {
         persistentContainer = NSPersistentContainer(name: modelName)
+        savingContext = persistentContainer.viewContext
         backgroundContext = persistentContainer.newBackgroundContext()
     }
     
     func configureContexts() {
-        viewContext.automaticallyMergesChangesFromParent = true
+        savingContext.automaticallyMergesChangesFromParent = true
         backgroundContext.automaticallyMergesChangesFromParent = true
         
         backgroundContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-        viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
+        savingContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
     }
     
     func load(completion: (() -> Void)? = nil) {
@@ -55,8 +59,8 @@ extension DataController {
             return
         }
         
-        if viewContext.hasChanges {
-            try? viewContext.save()
+        if savingContext.hasChanges {
+            try? savingContext.save()
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + interval) {

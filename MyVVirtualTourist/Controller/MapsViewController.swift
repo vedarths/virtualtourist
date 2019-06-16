@@ -13,15 +13,43 @@ import CoreData
 class MapsViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapKit: MKMapView!
+    @IBOutlet weak var footerView: UIView!
+    
     var pinAnnotation: MKPointAnnotation? = nil
     
     var dataController:DataController!
     
+    var fetchedResultsController:NSFetchedResultsController<LocationPin>!
+    
+    fileprivate func setupFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapKit.delegate = self
+        setupFetchedResultsController()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupFetchedResultsController()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        fetchedResultsController = nil
+    }
+    
     @IBAction func handleLongPressAction(_ sender: UILongPressGestureRecognizer) {
        addAnnotation(gestureRecognizer: sender)
     }
@@ -40,13 +68,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         } else if gestureRecognizer.state == .changed {
             pinAnnotation!.coordinate = newCoordinates
         } else if gestureRecognizer.state == .ended {
-            let locationPin = LocationPin(context: dataController.viewContext)
-            locationPin.latitude = String(pinAnnotation!.coordinate.latitude)
-            locationPin.longitude = String(pinAnnotation!.coordinate.longitude)
-            try? dataController.viewContext.save()
+            dataController.saveLocationPin(pinAnnotation!)
         }
     }
    
+    
 }
 
 

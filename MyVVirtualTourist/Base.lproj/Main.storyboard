@@ -33,21 +33,44 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BnG-K0-WF6" userLabel="Footer View">
+                                <rect key="frame" x="8" y="632" width="359" height="35"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Pins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hU2-CP-XdI" userLabel="Delete Pins">
+                                        <rect key="frame" x="8" y="6" width="351" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="hU2-CP-XdI" firstAttribute="leading" secondItem="BnG-K0-WF6" secondAttribute="leading" constant="8" id="BWg-Ux-Tie"/>
+                                    <constraint firstItem="hU2-CP-XdI" firstAttribute="top" secondItem="BnG-K0-WF6" secondAttribute="top" constant="6" id="Ti0-QF-D5Z"/>
+                                    <constraint firstAttribute="bottom" secondItem="hU2-CP-XdI" secondAttribute="bottom" constant="8" id="hf2-Bd-RD0"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hU2-CP-XdI" secondAttribute="trailing" constant="8" id="5Us-hG-khY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qUM-8w-FIE" secondAttribute="trailing" constant="8" id="9ds-vY-vSe"/>
                             <constraint firstItem="qUM-8w-FIE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="GbT-UO-Nqh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="BnG-K0-WF6" secondAttribute="bottom" id="Hb6-st-vsa"/>
+                            <constraint firstItem="BnG-K0-WF6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="612" id="SS9-Bd-GD3"/>
                             <constraint firstItem="OI2-tc-Kb4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="Tm4-g4-uH4"/>
                             <constraint firstItem="OI2-tc-Kb4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Vlb-ie-kLc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OI2-tc-Kb4" secondAttribute="bottom" constant="603" id="gas-pK-wl2"/>
                             <constraint firstItem="qUM-8w-FIE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49" id="iPL-nh-dZb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="BnG-K0-WF6" secondAttribute="trailing" constant="8" id="ony-0H-SPd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qUM-8w-FIE" secondAttribute="bottom" constant="43" id="rEQ-SV-3WO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OI2-tc-Kb4" secondAttribute="trailing" constant="8" id="uup-WG-AP0"/>
+                            <constraint firstItem="BnG-K0-WF6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="vU3-4W-IES"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="footerView" destination="BnG-K0-WF6" id="EIE-Pw-mHC"/>
                         <outlet property="mapKit" destination="qUM-8w-FIE" id="SCd-vD-YLP"/>
                     </connections>
                 </viewController>

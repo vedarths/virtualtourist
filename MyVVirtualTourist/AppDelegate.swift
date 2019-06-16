@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    let dataController = DataController(modelName: "VirtualTourist")
+    let dataController = DataController.getInstance()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func saveViewContext() {
-        try? dataController.viewContext.save()
+        try? dataController.savingContext.save()
     }
 
 }
