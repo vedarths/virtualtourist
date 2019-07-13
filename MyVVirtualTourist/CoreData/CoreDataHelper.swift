@@ -17,7 +17,7 @@ extension DataController {
         if let sorting = sorting {
             fr.sortDescriptors = [sorting]
         }
-        guard let pin = try savingContext.fetch(fr) as? [LocationPin] else {
+        guard let pin = try viewContext.fetch(fr) as? [LocationPin] else {
             return nil
         }
         return pin
@@ -29,7 +29,7 @@ extension DataController {
         if let sorting = sorting {
             fr.sortDescriptors = [sorting]
         }
-        guard let pin = (try savingContext.fetch(fr) as! [LocationPin]).first else {
+        guard let pin = (try viewContext.fetch(fr) as! [LocationPin]).first else {
             return nil
         }
         return pin
@@ -41,18 +41,18 @@ extension DataController {
         if let sorting = sorting {
             fr.sortDescriptors = [sorting]
         }
-        guard let photos = try savingContext.fetch(fr) as? [Photo] else {
+        guard let photos = try viewContext.fetch(fr) as? [Photo] else {
             return nil
         }
         return photos
     }
     
     func saveLocationPin(_ pinAnnotation: MKPointAnnotation) {
-        let locationPin = LocationPin(context: savingContext)
+        let locationPin = LocationPin(context: viewContext)
         locationPin.latitude = String(pinAnnotation.coordinate.latitude)
         locationPin.longitude = String(pinAnnotation.coordinate.longitude)
         do {
-          try savingContext.save()
+          try viewContext.save()
         } catch {
             print("Error while saving location pin: \(error)")
         }

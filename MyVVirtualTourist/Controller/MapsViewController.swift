@@ -18,12 +18,13 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     var pinAnnotation: MKPointAnnotation? = nil
     var fetchedResultsController:NSFetchedResultsController<LocationPin>!
     
+    @IBOutlet var gestureRecognizers: [UILongPressGestureRecognizer]!
     fileprivate func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
 
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "locationPins")
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -79,12 +80,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         }
         mapView.showAnnotations(mapView.annotations, animated: true)
     }
-    
-    @IBAction func handleLongPressAction(_ sender: UILongPressGestureRecognizer) {
-       addAnnotation(gestureRecognizer: sender)
+
+  
+    @IBAction func handleLongPressGesture(_ sender: UILongPressGestureRecognizer) {
+        addAnnotation(gestureRecognizer: sender)
     }
-    
-    func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
+    func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = gestureRecognizer.location(in: mapView)
         let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         

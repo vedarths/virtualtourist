@@ -12,43 +12,51 @@ import CoreData
 class DataController {
     
     let persistentContainer: NSPersistentContainer
-    internal let dbURL: URL
-    private let modelURL: URL
-    private let model: NSManagedObjectModel
-    internal let savingContext: NSManagedObjectContext
-    internal let backgroundContext: NSManagedObjectContext
-    internal let coordinator: NSPersistentStoreCoordinator
+    //internal let dbURL: URL
+    //private let modelURL: URL
+    
+    var viewContext:NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
+    
+    let backgroundContext: NSManagedObjectContext!
+    
+//    private let model: NSManagedObjectModel
+//    internal let savingContext: NSManagedObjectContext
+//
+//    internal let coordinator: NSPersistentStoreCoordinator
     static func getInstance() -> DataController {
         struct Singleton {
-            static var instance = DataController(modelName: "Virtual_Tourist")!
+            static var instance = DataController(modelName: "Virtual_Tourist")
         }
         return Singleton.instance
     }
     
-    init?(modelName: String) {
-        self.modelURL = getModelUrl(name: modelName, extension: "momd")!
+    init(modelName: String) {
+       // self.modelURL = getModelUrl(name: modelName, extension: "momd")!
         // create model from Url
-        guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
-            print("unable to create a model from \(modelURL)")
-            return nil
-        }
-        self.model = model
-        coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+//        guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
+//            print("unable to create a model from \(modelURL)")
+//            return nil
+//        }
+//        self.model = model
+//        coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+//        persistentContainer = NSPersistentContainer(name: modelName)
+//        savingContext = persistentContainer.viewContext
+//        backgroundContext = persistentContainer.newBackgroundContext()
         persistentContainer = NSPersistentContainer(name: modelName)
-        savingContext = persistentContainer.viewContext
-        backgroundContext = persistentContainer.newBackgroundContext()
+        backgroundContext = persistentContainer.viewContext
     }
     
-    func addStoreCoordinator(_ storeType: String, configuration: String?, storeURL: URL, options : [NSObject:AnyObject]?) throws {
-        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbURL, options: nil)
-    }
+//    func addStoreCoordinator(_ storeType: String, configuration: String?, storeURL: URL, options : [NSObject:AnyObject]?) throws {
+//        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbURL, options: nil)
+//    }
     
     func configureContexts() {
-        savingContext.automaticallyMergesChangesFromParent = true
+        viewContext.automaticallyMergesChangesFromParent = true
         backgroundContext.automaticallyMergesChangesFromParent = true
-        
         backgroundContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-        savingContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
+        viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
     }
     
     func load(completion: (() -> Void)? = nil) {
@@ -61,14 +69,13 @@ class DataController {
             completion?()
         }
     }
-    
-    func getModelUrl(name: String, extension: String) -> URL? {
-        guard let modelUrl = Bundle.main.url(forResource: name, withExtension: "momd") else {
-            print("Unable to find \(name) in the main bundle")
-            return nil
-        }
-        return modelUrl
-    }
+//    private func getModelUrl(name: String, extension: String) -> URL? {
+//        guard let modelUrl = Bundle.main.url(forResource: name, withExtension: "momd") else {
+//            print("Unable to find \(name) in the main bundle")
+//            return nil
+//        }
+//        return modelUrl
+//    }
 }
 
 // MARK: - Autosaving
@@ -82,8 +89,8 @@ extension DataController {
             return
         }
         
-        if savingContext.hasChanges {
-            try? savingContext.save()
+        if viewContext.hasChanges {
+            try? viewContext.save()
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
@@ -92,10 +99,10 @@ extension DataController {
     }
 }
 
-internal extension DataController {
-    func purgeData() throws {
-        try coordinator.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
-        try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
-    }
-}
+//internal extension DataController {
+//    func purgeData() throws {
+//        try coordinator.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
+//        try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
+//    }
+//}
 

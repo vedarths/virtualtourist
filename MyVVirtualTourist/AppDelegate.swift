@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func saveViewContext() {
-        try? dataController.savingContext.save()
+        try? dataController.viewContext.save()
     }
 
 }
