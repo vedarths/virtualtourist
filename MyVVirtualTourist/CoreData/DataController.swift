@@ -17,7 +17,7 @@ class DataController {
     
     static func getInstance() -> DataController {
         struct Singleton {
-            static var instance = DataController(modelName: "Virtual_Tourist")
+            static var instance = DataController(modelName: "MyVVirtualTourist")
         }
         return Singleton.instance
     }

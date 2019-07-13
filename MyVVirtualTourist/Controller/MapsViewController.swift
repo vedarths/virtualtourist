@@ -22,22 +22,26 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     var fetchedResultsController:NSFetchedResultsController<LocationPin>!
     
     fileprivate func setupFetchedResultsController() {
-        let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
-        }
+//        let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
+//        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+//        fetchRequest.sortDescriptors = [sortDescriptor]
+//        
+//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
+//        do {
+//            try fetchedResultsController.performFetch()
+//        } catch {
+//            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+//        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapKit.delegate = self
         setupFetchedResultsController()
+        footerView.isHidden = true
+        if let locationPins = getAllPins() {
+            getPins(locationPins)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +76,16 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         }
     }
    
+    private func getAllPins() -> [LocationPin]? {
+        var pins: [LocationPin]?
+        do {
+            try locationPins = CoreDataHelper.getInstance().fetchAllPins(entityName: LocationPin.name)
+        } catch {
+            print("\(#function) error:\(error)")
+            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
+        }
+        return pins
+    }
     
 }
 

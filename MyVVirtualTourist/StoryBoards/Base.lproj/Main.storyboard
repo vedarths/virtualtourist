@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="TJD-wb-8rZ">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,6 +10,22 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="5Bv-si-yNx">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zln-h9-ohA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController id="TJD-wb-8rZ" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gHW-sH-BKq">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="sO6-qs-vbB"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="-793" y="134"/>
+        </scene>
         <!--Maps View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -19,14 +35,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-8w-FIE">
-                                <rect key="frame" x="8" y="69" width="359" height="555"/>
+                                <rect key="frame" x="8" y="113" width="359" height="555"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="W1R-sF-10z" appends="YES" id="Jpa-dR-dnm"/>
                                 </connections>
                             </mapView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OI2-tc-Kb4">
-                                <rect key="frame" x="8" y="20" width="359" height="44"/>
+                                <rect key="frame" x="8" y="64" width="359" height="44"/>
                                 <items>
                                     <navigationItem title="Virtual Tourist" id="eeS-jx-reK" userLabel="Virtual Tourist">
                                         <barButtonItem key="rightBarButtonItem" title="Edit Pins" id="f8u-6i-sde" userLabel="Edit Pins"/>
@@ -34,7 +50,7 @@
                                 </items>
                             </navigationBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BnG-K0-WF6" userLabel="Footer View">
-                                <rect key="frame" x="8" y="632" width="359" height="35"/>
+                                <rect key="frame" x="8" y="676" width="359" height="35"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Pins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hU2-CP-XdI" userLabel="Delete Pins">
                                         <rect key="frame" x="8" y="6" width="351" height="21"/>
@@ -69,6 +85,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="0fP-1F-OQv"/>
                     <connections>
                         <outlet property="footerView" destination="BnG-K0-WF6" id="EIE-Pw-mHC"/>
                         <outlet property="mapKit" destination="qUM-8w-FIE" id="SCd-vD-YLP"/>

@@ -22,6 +22,10 @@
 		BE1E8F8122B60E89006012C6 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1E8F8022B60E89006012C6 /* PhotoAlbumViewController.swift */; };
 		BE1E8F8422B60FF4006012C6 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1E8F8322B60FF4006012C6 /* PhotoCell.swift */; };
 		BE1E8F8722B61608006012C6 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1E8F8622B61608006012C6 /* CoreDataHelper.swift */; };
+		BE1E8F9122B63A61006012C6 /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1E8F9022B63A61006012C6 /* ViewController+Extensions.swift */; };
+		BE3B804E22D9932000462282 /* FlickerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804D22D9932000462282 /* FlickerConstants.swift */; };
+		BE3B805022D994A100462282 /* FlickrClientOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804F22D994A100462282 /* FlickrClientOperations.swift */; };
+		BE3B805222D995F500462282 /* PhotosParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B805122D995F500462282 /* PhotosParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,10 @@
 		BE1E8F8022B60E89006012C6 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		BE1E8F8322B60FF4006012C6 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		BE1E8F8622B61608006012C6 /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
+		BE1E8F9022B63A61006012C6 /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
+		BE3B804D22D9932000462282 /* FlickerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerConstants.swift; sourceTree = "<group>"; };
+		BE3B804F22D994A100462282 /* FlickrClientOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClientOperations.swift; sourceTree = "<group>"; };
+		BE3B805122D995F500462282 /* PhotosParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				BE1E8F7722B46A9C006012C6 /* Managed Object Extensions */,
+				BE3B805122D995F500462282 /* PhotosParser.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -167,6 +176,7 @@
 			children = (
 				BE05DF5922ABB9340034D627 /* MapsViewController.swift */,
 				BE1E8F8022B60E89006012C6 /* PhotoAlbumViewController.swift */,
+				BE1E8F9022B63A61006012C6 /* ViewController+Extensions.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -192,6 +202,8 @@
 			isa = PBXGroup;
 			children = (
 				BE1E8F7E22B60E5D006012C6 /* FlickerClient.swift */,
+				BE3B804D22D9932000462282 /* FlickerConstants.swift */,
+				BE3B804F22D994A100462282 /* FlickrClientOperations.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -337,9 +349,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE1E8F8722B61608006012C6 /* CoreDataHelper.swift in Sources */,
+				BE3B805222D995F500462282 /* PhotosParser.swift in Sources */,
 				BE05DF5A22ABB9340034D627 /* MapsViewController.swift in Sources */,
+				BE3B805022D994A100462282 /* FlickrClientOperations.swift in Sources */,
+				BE3B804E22D9932000462282 /* FlickerConstants.swift in Sources */,
 				BE1E8F8422B60FF4006012C6 /* PhotoCell.swift in Sources */,
 				BE1E8F7F22B60E5D006012C6 /* FlickerClient.swift in Sources */,
+				BE1E8F9122B63A61006012C6 /* ViewController+Extensions.swift in Sources */,
 				BE1E8F7622B4690D006012C6 /* DataController.swift in Sources */,
 				BE1E8F8122B60E89006012C6 /* PhotoAlbumViewController.swift in Sources */,
 				BE05DF6022ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld in Sources */,
