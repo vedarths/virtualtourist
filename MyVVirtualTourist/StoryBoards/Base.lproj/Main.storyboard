@@ -13,92 +13,75 @@
         <!--Navigation Controller-->
         <scene sceneID="5Bv-si-yNx">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zln-h9-ohA" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="TJD-wb-8rZ" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gHW-sH-BKq">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="sO6-qs-vbB"/>
+                        <segue destination="l9Q-fe-4LX" kind="relationship" relationship="rootViewController" id="4b3-Tk-Wbj"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zln-h9-ohA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-793" y="134"/>
         </scene>
-        <!--Maps View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Virtual Tourist-->
+        <scene sceneID="20S-WY-aBB">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MapsViewController" customModule="MyVVirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <viewController id="l9Q-fe-4LX" customClass="MapsViewController" customModule="MyVVirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N3F-Y2-90t">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qUM-8w-FIE">
-                                <rect key="frame" x="8" y="113" width="359" height="555"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="W1R-sF-10z" appends="YES" id="Jpa-dR-dnm"/>
-                                </connections>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="a7P-de-cH3">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="375" id="Fxe-kP-IfK"/>
+                                    <constraint firstAttribute="height" constant="603" id="Qca-oZ-fqL"/>
+                                </constraints>
                             </mapView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OI2-tc-Kb4">
-                                <rect key="frame" x="8" y="64" width="359" height="44"/>
-                                <items>
-                                    <navigationItem title="Virtual Tourist" id="eeS-jx-reK" userLabel="Virtual Tourist">
-                                        <barButtonItem key="rightBarButtonItem" title="Edit Pins" id="f8u-6i-sde" userLabel="Edit Pins"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BnG-K0-WF6" userLabel="Footer View">
-                                <rect key="frame" x="8" y="676" width="359" height="35"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jSX-jU-rpd" userLabel="Footer View">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Pins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hU2-CP-XdI" userLabel="Delete Pins">
-                                        <rect key="frame" x="8" y="6" width="351" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Pins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="al7-lg-b0g">
+                                        <rect key="frame" x="144" y="14.5" width="87" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" red="0.97361403700000004" green="0.90542644260000005" blue="0.95958441500000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.059798034870000003" green="0.1913343528" blue="0.9192116857" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstItem="hU2-CP-XdI" firstAttribute="leading" secondItem="BnG-K0-WF6" secondAttribute="leading" constant="8" id="BWg-Ux-Tie"/>
-                                    <constraint firstItem="hU2-CP-XdI" firstAttribute="top" secondItem="BnG-K0-WF6" secondAttribute="top" constant="6" id="Ti0-QF-D5Z"/>
-                                    <constraint firstAttribute="bottom" secondItem="hU2-CP-XdI" secondAttribute="bottom" constant="8" id="hf2-Bd-RD0"/>
+                                    <constraint firstItem="al7-lg-b0g" firstAttribute="centerY" secondItem="jSX-jU-rpd" secondAttribute="centerY" id="Jke-2F-fkC"/>
+                                    <constraint firstAttribute="height" constant="50" id="ai5-YN-tQi"/>
+                                    <constraint firstItem="al7-lg-b0g" firstAttribute="centerX" secondItem="jSX-jU-rpd" secondAttribute="centerX" id="liE-jL-8wP"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hU2-CP-XdI" secondAttribute="trailing" constant="8" id="5Us-hG-khY"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qUM-8w-FIE" secondAttribute="trailing" constant="8" id="9ds-vY-vSe"/>
-                            <constraint firstItem="qUM-8w-FIE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="GbT-UO-Nqh"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="BnG-K0-WF6" secondAttribute="bottom" id="Hb6-st-vsa"/>
-                            <constraint firstItem="BnG-K0-WF6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="612" id="SS9-Bd-GD3"/>
-                            <constraint firstItem="OI2-tc-Kb4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="Tm4-g4-uH4"/>
-                            <constraint firstItem="OI2-tc-Kb4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Vlb-ie-kLc"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OI2-tc-Kb4" secondAttribute="bottom" constant="603" id="gas-pK-wl2"/>
-                            <constraint firstItem="qUM-8w-FIE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="49" id="iPL-nh-dZb"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="BnG-K0-WF6" secondAttribute="trailing" constant="8" id="ony-0H-SPd"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qUM-8w-FIE" secondAttribute="bottom" constant="43" id="rEQ-SV-3WO"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OI2-tc-Kb4" secondAttribute="trailing" constant="8" id="uup-WG-AP0"/>
-                            <constraint firstItem="BnG-K0-WF6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="vU3-4W-IES"/>
+                            <constraint firstItem="jSX-jU-rpd" firstAttribute="trailing" secondItem="a7P-de-cH3" secondAttribute="trailing" id="7d7-WR-h8b"/>
+                            <constraint firstItem="jSX-jU-rpd" firstAttribute="leading" secondItem="a7P-de-cH3" secondAttribute="leading" id="Ez4-AY-CJo"/>
+                            <constraint firstItem="a7P-de-cH3" firstAttribute="trailing" secondItem="rnc-do-AIi" secondAttribute="trailing" id="Jaa-lf-h9W"/>
+                            <constraint firstItem="jSX-jU-rpd" firstAttribute="bottom" secondItem="a7P-de-cH3" secondAttribute="bottom" id="eX6-Dl-yzn"/>
+                            <constraint firstItem="a7P-de-cH3" firstAttribute="bottom" secondItem="rnc-do-AIi" secondAttribute="bottom" id="llW-wW-X7r"/>
+                            <constraint firstItem="a7P-de-cH3" firstAttribute="top" secondItem="rnc-do-AIi" secondAttribute="top" id="qgY-gh-Ph7"/>
+                            <constraint firstItem="a7P-de-cH3" firstAttribute="leading" secondItem="rnc-do-AIi" secondAttribute="leading" id="y7F-MG-mf4"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="rnc-do-AIi"/>
                     </view>
-                    <navigationItem key="navigationItem" id="0fP-1F-OQv"/>
+                    <navigationItem key="navigationItem" title="Virtual Tourist" id="FiH-Va-eR2">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="ELl-ZO-1OY"/>
+                    </navigationItem>
                     <connections>
-                        <outlet property="footerView" destination="BnG-K0-WF6" id="EIE-Pw-mHC"/>
-                        <outlet property="mapKit" destination="qUM-8w-FIE" id="SCd-vD-YLP"/>
+                        <outlet property="footer" destination="jSX-jU-rpd" id="Wjm-zn-egW"/>
+                        <outlet property="mapView" destination="a7P-de-cH3" id="Y8u-XX-827"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="W1R-sF-10z">
-                    <connections>
-                        <action selector="handleLongPressAction:" destination="BYZ-38-t0r" id="nGM-vI-9af"/>
-                    </connections>
-                </pongPressGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BF0-Gt-cZx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="-82.400000000000006" y="132.68365817091455"/>
         </scene>
     </scenes>
 </document>

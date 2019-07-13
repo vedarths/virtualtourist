@@ -11,36 +11,35 @@ import MapKit
 import CoreData
 
 class MapsViewController: UIViewController, MKMapViewDelegate {
-
-    @IBOutlet weak var mapKit: MKMapView!
-    @IBOutlet weak var footerView: UIView!
     
-    var pinAnnotation: MKPointAnnotation? = nil
-    
+    @IBOutlet weak var footer: UIView!
+    @IBOutlet weak var mapView: MKMapView!
     var dataController:DataController!
-    
+    var pinAnnotation: MKPointAnnotation? = nil
     var fetchedResultsController:NSFetchedResultsController<LocationPin>!
     
     fileprivate func setupFetchedResultsController() {
-//        let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
-//        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-//        fetchRequest.sortDescriptors = [sortDescriptor]
-//        
-//        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
-//        do {
-//            try fetchedResultsController.performFetch()
-//        } catch {
-//            fatalError("The fetch could not be performed: \(error.localizedDescription)")
-//        }
+        let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.savingContext, sectionNameKeyPath: nil, cacheName: "locationPins")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
     }
     
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapKit.delegate = self
+        mapView.delegate = self
+        navigationItem.rightBarButtonItem = editButtonItem
         setupFetchedResultsController()
-        footerView.isHidden = true
+        footer.isHidden = true
         if let locationPins = getAllPins() {
-            getPins(locationPins)
+            showPins(locationPins)
         }
     }
 
@@ -54,13 +53,40 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         fetchedResultsController = nil
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        footer.isHidden = !editing
+    }
+    
+    private func getAllPins() -> [LocationPin]? {
+        var pins: [LocationPin]?
+        do {
+            try pins = DataController.getInstance().fetchAllPins(entityName: "LocationPin")
+        } catch {
+            print("\(#function) error:\(error)")
+            //showInfo(withTitle: "Error", withMessage: "Error while fetching locations: \(error)")
+        }
+        return pins
+    }
+    
+    func showPins(_ pins: [LocationPin]) {
+        for pin in pins where pin.latitude != nil && pin.longitude != nil {
+            let annotation = MKPointAnnotation()
+            let lat = Double(pin.latitude!)!
+            let lon = Double(pin.longitude!)!
+            annotation.coordinate = CLLocationCoordinate2DMake(lat, lon)
+            mapView.addAnnotation(annotation)
+        }
+        mapView.showAnnotations(mapView.annotations, animated: true)
+    }
+    
     @IBAction func handleLongPressAction(_ sender: UILongPressGestureRecognizer) {
        addAnnotation(gestureRecognizer: sender)
     }
     
     func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
-        let touchPoint = gestureRecognizer.location(in: mapKit)
-        let newCoordinates = mapKit.convert(touchPoint, toCoordinateFrom: mapKit)
+        let touchPoint = gestureRecognizer.location(in: mapView)
+        let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
         if gestureRecognizer.state == UIGestureRecognizer.State.began {
             pinAnnotation = MKPointAnnotation()
@@ -68,7 +94,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             
             print("\(#function) Coordinate: \(newCoordinates.latitude),\(newCoordinates.longitude)")
             
-            mapKit.addAnnotation(pinAnnotation!)
+            mapView.addAnnotation(pinAnnotation!)
         } else if gestureRecognizer.state == .changed {
             pinAnnotation!.coordinate = newCoordinates
         } else if gestureRecognizer.state == .ended {
@@ -76,15 +102,16 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         }
     }
    
-    private func getAllPins() -> [LocationPin]? {
-        var pins: [LocationPin]?
+    private func getPin(latitude: String, longitude: String) -> LocationPin? {
+        let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)
+        var pin: LocationPin?
         do {
-            try locationPins = CoreDataHelper.getInstance().fetchAllPins(entityName: LocationPin.name)
+            try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
         } catch {
             print("\(#function) error:\(error)")
-            showInfo(withTitle: "Error", withMessage: "Error while fetching Pin locations: \(error)")
+            //showInfo(withTitle: "Error", withMessage: "Error while fetching location: \(error)")
         }
-        return pins
+        return pin
     }
     
 }

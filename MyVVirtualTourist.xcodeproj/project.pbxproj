@@ -10,7 +10,7 @@
 		BE05DF5822ABB9340034D627 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05DF5722ABB9340034D627 /* AppDelegate.swift */; };
 		BE05DF5A22ABB9340034D627 /* MapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05DF5922ABB9340034D627 /* MapsViewController.swift */; };
 		BE05DF5D22ABB9340034D627 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE05DF5B22ABB9340034D627 /* Main.storyboard */; };
-		BE05DF6022ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BE05DF5E22ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld */; };
+		BE05DF6022ABB9340034D627 /* Virtual_Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BE05DF5E22ABB9340034D627 /* Virtual_Tourist.xcdatamodeld */; };
 		BE05DF6222ABB9350034D627 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE05DF6122ABB9350034D627 /* Assets.xcassets */; };
 		BE05DF6522ABB9350034D627 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE05DF6322ABB9350034D627 /* LaunchScreen.storyboard */; };
 		BE05DF7022ABB9350034D627 /* MyVVirtualTouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE05DF6F22ABB9350034D627 /* MyVVirtualTouristTests.swift */; };
@@ -131,7 +131,7 @@
 				BE05DF6122ABB9350034D627 /* Assets.xcassets */,
 				BE05DF6322ABB9350034D627 /* LaunchScreen.storyboard */,
 				BE05DF6622ABB9350034D627 /* Info.plist */,
-				BE05DF5E22ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld */,
+				BE05DF5E22ABB9340034D627 /* Virtual_Tourist.xcdatamodeld */,
 			);
 			path = MyVVirtualTourist;
 			sourceTree = "<group>";
@@ -358,7 +358,7 @@
 				BE1E8F9122B63A61006012C6 /* ViewController+Extensions.swift in Sources */,
 				BE1E8F7622B4690D006012C6 /* DataController.swift in Sources */,
 				BE1E8F8122B60E89006012C6 /* PhotoAlbumViewController.swift in Sources */,
-				BE05DF6022ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld in Sources */,
+				BE05DF6022ABB9340034D627 /* Virtual_Tourist.xcdatamodeld in Sources */,
 				BE1E8F7922B46AC5006012C6 /* LocationPin+Extensions.swift in Sources */,
 				BE1E8F7B22B46BA5006012C6 /* Photo+Extension.swift in Sources */,
 				BE05DF5822ABB9340034D627 /* AppDelegate.swift in Sources */,
@@ -692,13 +692,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		BE05DF5E22ABB9340034D627 /* MyVVirtualTourist.xcdatamodeld */ = {
+		BE05DF5E22ABB9340034D627 /* Virtual_Tourist.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				BE05DF5F22ABB9340034D627 /* MyVVirtualTourist.xcdatamodel */,
 			);
 			currentVersion = BE05DF5F22ABB9340034D627 /* MyVVirtualTourist.xcdatamodel */;
-			path = MyVVirtualTourist.xcdatamodeld;
+			path = Virtual_Tourist.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

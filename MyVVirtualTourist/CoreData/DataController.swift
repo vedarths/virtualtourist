@@ -12,20 +12,35 @@ import CoreData
 class DataController {
     
     let persistentContainer: NSPersistentContainer
+    internal let dbURL: URL
+    private let modelURL: URL
+    private let model: NSManagedObjectModel
     internal let savingContext: NSManagedObjectContext
     internal let backgroundContext: NSManagedObjectContext
-    
+    internal let coordinator: NSPersistentStoreCoordinator
     static func getInstance() -> DataController {
         struct Singleton {
-            static var instance = DataController(modelName: "MyVVirtualTourist")
+            static var instance = DataController(modelName: "Virtual_Tourist")!
         }
         return Singleton.instance
     }
     
-    init(modelName: String) {
+    init?(modelName: String) {
+        self.modelURL = getModelUrl(name: modelName, extension: "momd")!
+        // create model from Url
+        guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
+            print("unable to create a model from \(modelURL)")
+            return nil
+        }
+        self.model = model
+        coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         persistentContainer = NSPersistentContainer(name: modelName)
         savingContext = persistentContainer.viewContext
         backgroundContext = persistentContainer.newBackgroundContext()
+    }
+    
+    func addStoreCoordinator(_ storeType: String, configuration: String?, storeURL: URL, options : [NSObject:AnyObject]?) throws {
+        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbURL, options: nil)
     }
     
     func configureContexts() {
@@ -45,6 +60,14 @@ class DataController {
             self.configureContexts()
             completion?()
         }
+    }
+    
+    func getModelUrl(name: String, extension: String) -> URL? {
+        guard let modelUrl = Bundle.main.url(forResource: name, withExtension: "momd") else {
+            print("Unable to find \(name) in the main bundle")
+            return nil
+        }
+        return modelUrl
     }
 }
 
@@ -66,6 +89,13 @@ extension DataController {
         DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
             self.autoSaveViewContext(interval: interval)
         }
+    }
+}
+
+internal extension DataController {
+    func purgeData() throws {
+        try coordinator.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
+        try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
     }
 }
 
