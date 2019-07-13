@@ -18,7 +18,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     var pinAnnotation: MKPointAnnotation? = nil
     var fetchedResultsController:NSFetchedResultsController<LocationPin>!
     
-    @IBOutlet var gestureRecognizers: [UILongPressGestureRecognizer]!
     fileprivate func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
@@ -32,7 +31,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-   
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -65,7 +63,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             try pins = DataController.getInstance().fetchAllPins(entityName: "LocationPin")
         } catch {
             print("\(#function) error:\(error)")
-            //showInfo(withTitle: "Error", withMessage: "Error while fetching locations: \(error)")
+            showInfo(withTitle: "Error", withMessage: "Error while fetching locations: \(error)")
         }
         return pins
     }
@@ -110,11 +108,55 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
         } catch {
             print("\(#function) error:\(error)")
-            //showInfo(withTitle: "Error", withMessage: "Error while fetching location: \(error)")
+            showInfo(withTitle: "Error", withMessage: "Error while fetching location: \(error)")
         }
         return pin
     }
     
 }
 
-
+extension MapsViewController {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "locationPin"
+        
+        var locationPinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
+        if locationPinView == nil {
+            locationPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            locationPinView!.canShowCallout = false
+            locationPinView!.pinTintColor = .red
+            locationPinView!.animatesDrop = true
+        } else {
+            locationPinView!.annotation = annotation
+        }
+        return locationPinView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            self.showInfo(withMessage: "Link not defined.")
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let annotation = view.annotation else {
+            return
+        }
+        
+        mapView.deselectAnnotation(annotation, animated: true)
+        print("\(#function) latitude \(annotation.coordinate.latitude) longitude \(annotation.coordinate.longitude)")
+        let latitudeVal = String(annotation.coordinate.latitude)
+        let longitudeVal = String(annotation.coordinate.longitude)
+        
+        if let pin = getPin(latitude: latitudeVal, longitude: longitudeVal) {
+            if isEditing {
+                mapView.removeAnnotation(annotation)
+                DataController.getInstance().viewContext.delete(pin)
+                return
+            }
+             performSegue(withIdentifier: "displayAlbum", sender: pin)
+        }
+       
+    }
+}

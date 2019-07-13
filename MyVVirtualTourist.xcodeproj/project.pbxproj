@@ -25,6 +25,7 @@
 		BE3B804E22D9932000462282 /* FlickerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804D22D9932000462282 /* FlickerConstants.swift */; };
 		BE3B805022D994A100462282 /* FlickrClientOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804F22D994A100462282 /* FlickrClientOperations.swift */; };
 		BE3B805222D995F500462282 /* PhotosParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B805122D995F500462282 /* PhotosParser.swift */; };
+		BED52EA322D9E0FB00826A83 /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED52EA222D9E0FB00826A83 /* ViewController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		BE3B804D22D9932000462282 /* FlickerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerConstants.swift; sourceTree = "<group>"; };
 		BE3B804F22D994A100462282 /* FlickrClientOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClientOperations.swift; sourceTree = "<group>"; };
 		BE3B805122D995F500462282 /* PhotosParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosParser.swift; sourceTree = "<group>"; };
+		BED52EA222D9E0FB00826A83 /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		BE05DF5622ABB9340034D627 /* MyVVirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				BED52EA122D9E0E500826A83 /* Extensions */,
 				BE1E8F8522B611DB006012C6 /* CoreData */,
 				BE1E8F8222B60FCF006012C6 /* Clients */,
 				BE05DF8B22ABB96A0034D627 /* StoryBoards */,
@@ -212,6 +215,14 @@
 				BE1E8F8622B61608006012C6 /* CoreDataHelper.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		BED52EA122D9E0E500826A83 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BED52EA222D9E0FB00826A83 /* ViewController+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -351,6 +362,7 @@
 				BE3B805022D994A100462282 /* FlickrClientOperations.swift in Sources */,
 				BE3B804E22D9932000462282 /* FlickerConstants.swift in Sources */,
 				BE1E8F8422B60FF4006012C6 /* PhotoCell.swift in Sources */,
+				BED52EA322D9E0FB00826A83 /* ViewController+Extensions.swift in Sources */,
 				BE1E8F7F22B60E5D006012C6 /* FlickerClient.swift in Sources */,
 				BE1E8F7622B4690D006012C6 /* DataController.swift in Sources */,
 				BE1E8F8122B60E89006012C6 /* PhotoAlbumViewController.swift in Sources */,
