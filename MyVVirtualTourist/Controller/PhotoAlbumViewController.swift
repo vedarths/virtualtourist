@@ -13,6 +13,13 @@ import MapKit
 
 class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     
+    @IBOutlet weak var mapView: MKMapView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
+    }
     
 }
