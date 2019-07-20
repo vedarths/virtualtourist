@@ -94,7 +94,7 @@
         <!--Photo Album View Controller-->
         <scene sceneID="kHT-gP-4bj">
             <objects>
-                <viewController id="MuW-a3-Vsp" customClass="PhotoAlbumViewController" customModule="MyVVirtualTourist" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbumViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MuW-a3-Vsp" customClass="PhotoAlbumViewController" customModule="MyVVirtualTourist" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tK1-Xv-y8s">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

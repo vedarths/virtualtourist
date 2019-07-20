@@ -43,15 +43,14 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         
         updateStatusLabel("")
         
-        guard let pin = locationPin else {
-            return
+        if let locationPin = locationPin {
+           showOnTheMap(locationPin)
+           setupFetchedResultControllerWith(locationPin)
         }
-        showOnTheMap(pin)
-        setupFetchedResultControllerWith(pin)
         
-        if let photos = pin.photos, photos.count == 0 {
+        if let photos = locationPin?.photos, photos.count == 0 {
             // pin selected has no photos - get from Flickr
-            getPhotosFromFlickr(pin)
+            getPhotosFromFlickr(locationPin!)
         }
     }
     

@@ -10,7 +10,7 @@ import Foundation
 
 extension FlickerClient {
     
-    func findBy(latitude: Double, longitude: Double, totalPages: Int?, completion: @escaping (_ result: PhotoParser?, _ error: Error?) -> Void) {
+    func findBy(latitude: Double, longitude: Double, totalPages: Int?, completion: @escaping (_ result: PhotosParser?, _ error: Error?) -> Void) {
         
         //get any random page
         var page: Int {
@@ -45,8 +45,8 @@ extension FlickerClient {
                 return
             }
             do {
-                let photoParser = try JSONDecoder().decode(PhotoParser.self, from: data )
-                completion(photoParser, nil)
+                let photosParser = try JSONDecoder().decode(PhotosParser.self, from: data )
+                completion(photosParser, nil)
             } catch {
                 print("\(#function) error: \(error)")
                 completion(nil, error)

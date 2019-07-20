@@ -35,11 +35,6 @@ class FlickerClient {
         
         /* add standard headers */
         request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: FlickerClient.Constants.AcceptKey)
-        request.addValue("application/json", forHTTPHeaderField: FlickerClient.Constants.ContentType)
-        request.addValue(FlickerClient.HeaderValues.ApiKeyValue, forHTTPHeaderField: FlickerClient.Constants.ApiKey)
-        request.addValue(FlickerClient.HeaderValues.ApplicationIdValue, forHTTPHeaderField: FlickerClient.Constants.ApplicationId)
-        
         /* 4. Make the request */
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             
@@ -95,8 +90,6 @@ class FlickerClient {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue(FlickerClient.HeaderValues.ApiKeyValue, forHTTPHeaderField: FlickerClient.Constants.ApiKey)
-        request.addValue(FlickerClient.HeaderValues.ApplicationIdValue, forHTTPHeaderField: FlickerClient.Constants.ApplicationId)
         request.httpBody = jsonBody.data(using: String.Encoding.utf8)
         
         

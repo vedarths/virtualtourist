@@ -12,11 +12,6 @@ extension FlickerClient {
     
     struct Constants {
         
-        static let AcceptKey = "Accept"
-        static let ContentType = "Content-Type"
-        static let ApplicationId = "X-Parse-Application-Id"
-        static let ApiKey = "X-Parse-REST-API-Key"
-        
         static let ApiScheme = "https"
         static let ApiHost = "api.flickr.com"
         static let ApiPath = "/services/rest"
@@ -25,7 +20,6 @@ extension FlickerClient {
         static let SearchBBoxHalfHeight = 0.2
         static let SearchLatRange = (-90.0, 90.0)
         static let SearchLonRange = (-180.0, 180.0)
-        
     }
     
     struct FlickrParameterKeys {
@@ -46,7 +40,7 @@ extension FlickerClient {
     
     struct FlickrParameterValues {
         static let SearchMethod = "flickr.photos.search"
-        static let APIKey = "e642c34c6ac8532ef77a7ec1c221babc"
+        static let APIKey = "73b2b0363ffb9110ebce27808e448e32"
         static let ResponseFormat = "json"
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let MediumURL = "url_n"
@@ -55,27 +49,5 @@ extension FlickerClient {
         static let AccuracyCityLevel = "11"
         static let AccuracyStreetLevel = "16"
     }
-    
-    
-    struct HeaderValues {
-        static let ApplicationIdValue = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
-        static let ApiKeyValue = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
-    }
-    
-    struct Methods {
-        static let Location = "/StudentLocation"
-    }
-    
-    struct URLArgumentKeys {
-        static let Limit = "limit"
-        static let Skip = "skip"
-        static let Where = "where"
-    }
-    
-    struct URLArgumentValues {
-        static let limit = "40"
-        static let Skip = "400"
-    }
-    
     
 }

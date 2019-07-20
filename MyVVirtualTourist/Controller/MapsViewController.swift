@@ -57,6 +57,13 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         footer.isHidden = !editing
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "displayAlbum") {
+            let photoAlbumViewController = segue.destination as! PhotoAlbumViewController
+            photoAlbumViewController.dataController = dataController
+        }
+    }
+    
     private func getAllPins() -> [LocationPin]? {
         var pins: [LocationPin]?
         do {
