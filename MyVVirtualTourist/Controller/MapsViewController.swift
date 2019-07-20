@@ -14,6 +14,8 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var footer: UIView!
     @IBOutlet weak var mapView: MKMapView!
+    var latitude: String?
+    var longitude: String?
     var dataController:DataController!
     var pinAnnotation: MKPointAnnotation? = nil
     var fetchedResultsController:NSFetchedResultsController<LocationPin>!
@@ -61,6 +63,8 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         if(segue.identifier == "displayAlbum") {
             let photoAlbumViewController = segue.destination as! PhotoAlbumViewController
             photoAlbumViewController.dataController = dataController
+            photoAlbumViewController.latitude = self.latitude
+            photoAlbumViewController.longitude = self.longitude
         }
     }
     
@@ -162,6 +166,8 @@ extension MapsViewController {
                 DataController.getInstance().viewContext.delete(pin)
                 return
             }
+            self.latitude = latitudeVal
+            self.longitude = longitudeVal
              performSegue(withIdentifier: "displayAlbum", sender: pin)
         }
        

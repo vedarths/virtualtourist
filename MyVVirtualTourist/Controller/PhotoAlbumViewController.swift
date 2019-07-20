@@ -12,16 +12,16 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate  {
+class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     
     var selected = [IndexPath]()
     var created: [IndexPath]!
     var deleted: [IndexPath]!
     var updated: [IndexPath]!
     var pages: Int? = nil
-    
     var alert = false
-    var locationPin: LocationPin?
+    var latitude: String?
+    var longitude: String?
     var fetchedResultController: NSFetchedResultsController<Photo>!
     var dataController:DataController!
     
@@ -42,16 +42,19 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
         mapView.isScrollEnabled = false
         
         updateStatusLabel("")
+        let pin = getPin(latitude: latitude!, longitude: longitude!) as LocationPin?
+        showOnTheMap(pin!)
+        setupFetchedResultControllerWith(pin!)
         
-        if let locationPin = locationPin {
-           showOnTheMap(locationPin)
-           setupFetchedResultControllerWith(locationPin)
-        }
+        print("pin is \(pin!)")
+        let photos = pin!.photos!
+        print("photos: \(String(describing: photos))")
+        //print("photos count is : \(photos.count)")
         
-        if let photos = locationPin?.photos, photos.count == 0 {
+        //if(photos.count == 0){
             // pin selected has no photos - get from Flickr
-            getPhotosFromFlickr(locationPin!)
-        }
+            getPhotosFromFlickr(pin!)
+        //}
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -185,6 +188,18 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectio
     }
 }
 
+private func getPin(latitude: String, longitude: String) -> LocationPin? {
+    let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)
+    var pin: LocationPin?
+    do {
+        try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
+    } catch {
+        print("\(#function) error:\(error)")
+    }
+    print(" pin in getPin is \(pin)")
+    return pin
+}
+
 extension PhotoAlbumViewController {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -207,87 +222,6 @@ extension PhotoAlbumViewController {
         return fetchedResultController.sections?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
-        cell.imageView.image = nil
-        cell.activityIndicator.startAnimating()
-        
-        return cell
-    }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let sectionInfo = self.fetchedResultController.sections?[section] {
-            return sectionInfo.numberOfObjects
-        }
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let photo = fetchedResultController.object(at: indexPath)
-        let photoViewCell = cell as! PhotoCell
-        photoViewCell.imageUrl = photo.imageUrl!
-        configImage(using: photoViewCell, photo: photo, collectionView: collectionView, index: indexPath)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photoToDelete = fetchedResultController.object(at: indexPath)
-        dataController.viewContext.delete(photoToDelete)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying: UICollectionViewCell, forItemAt: IndexPath) {
-        
-        if collectionView.cellForItem(at: forItemAt) == nil {
-            return
-        }
-        
-        let photo = fetchedResultController.object(at: forItemAt)
-        if let imageUrl = photo.imageUrl {
-            FlickerClient.sharedInstance().cancelDownload(imageUrl)
-        }
-    }
-    
-    private func configImage(using cell: PhotoCell, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
-        if let imageData = photo.image {
-            cell.activityIndicator.stopAnimating()
-            cell.imageView.image = UIImage(data: Data(referencing: imageData))
-        } else {
-            if let imageUrl = photo.imageUrl {
-                cell.activityIndicator.startAnimating()
-                FlickerClient.sharedInstance().getImage(imageUrl: imageUrl) { (data, error) in
-                    if let _ = error {
-                        self.performUIUpdatesOnMain {
-                            cell.activityIndicator.stopAnimating()
-                            self.errorForImageUrl(imageUrl)
-                        }
-                        return
-                    } else if let data = data {
-                        self.performUIUpdatesOnMain {
-                            
-                            if let currentCell = collectionView.cellForItem(at: index) as? PhotoCell {
-                                if currentCell.imageUrl == imageUrl {
-                                    currentCell.imageView.image = UIImage(data: data)
-                                    cell.activityIndicator.stopAnimating()
-                                }
-                            }
-                            photo.image = NSData(data: data)
-                            DispatchQueue.global(qos: .background).async {
-                                self.save()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    private func errorForImageUrl(_ imageUrl: String) {
-        if !self.alert {
-            self.showInfo(withTitle: "Error", withMessage: "Error while fetching image for URL: \(imageUrl)", action: {
-                self.alert = false
-            })
-        }
-        self.alert = true
-    }
 }
 
