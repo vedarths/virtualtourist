@@ -20,7 +20,7 @@ public class LocationPin: NSManagedObject {
             self.latitude = latitude
             self.longitude = longitude
         } else {
-            fatalError("Unable to find Entity name!")
+            fatalError("Could not initialise entity LocationPin!")
         }
     }
     

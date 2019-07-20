@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
+class AlbumViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: - Outlets
     
@@ -131,7 +131,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    private func storePhotos(_ photos: [PhotoParser], forPin: LocationPin) {
+    private func storePhotos(_ photos: [PhotoJsonParser], forPin: LocationPin) {
         func showErrorMessage(msg: String) {
             showInfo(withTitle: "Error", withMessage: msg)
         }

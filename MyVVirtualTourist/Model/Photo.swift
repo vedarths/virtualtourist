@@ -22,7 +22,7 @@ public class Photo: NSManagedObject {
             self.imageUrl = imageUrl
             self.pin = forPin
         } else {
-            fatalError("Unable to find Entity name!")
+            fatalError("Could not initialise entity Photo!")
         }
     }
     
