@@ -176,6 +176,9 @@
                                                     <rect key="frame" x="20" y="0.0" width="374" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="New Collection"/>
+                                                    <connections>
+                                                        <action selector="deleteCollection:" destination="MuW-a3-Vsp" eventType="touchUpInside" id="zc4-fC-GyG"/>
+                                                    </connections>
                                                 </button>
                                             </barButtonItem>
                                         </items>

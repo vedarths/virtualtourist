@@ -22,6 +22,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     var alert = false
     var latitude: String?
     var longitude: String?
+    var locationPin : LocationPin?
     var fetchedResultController: NSFetchedResultsController<Photo>!
     var dataController:DataController!
     
@@ -45,16 +46,25 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         let pin = getPin(latitude: latitude!, longitude: longitude!) as LocationPin?
         showOnTheMap(pin!)
         setupFetchedResultControllerWith(pin!)
-        
+        self.locationPin = pin!
         print("pin is \(pin!)")
-        let photos = pin!.photos!
-        print("photos: \(String(describing: photos))")
+        // let photos = pin!.photos!
+        //print("photos: \(String(describing: photos))")
         //print("photos count is : \(photos.count)")
         
         //if(photos.count == 0){
             // pin selected has no photos - get from Flickr
-            getPhotosFromFlickr(pin!)
+        getPhotosFromFlickr(pin!)
         //}
+    }
+    
+    
+    @IBAction func deleteCollection(_ sender: Any) {
+        for photos in fetchedResultController.fetchedObjects! {
+            DataController.getInstance().viewContext.delete(photos)
+        }
+        save()
+        getPhotosFromFlickr(locationPin!)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
