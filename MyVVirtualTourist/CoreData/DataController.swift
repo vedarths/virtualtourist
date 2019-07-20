@@ -12,19 +12,13 @@ import CoreData
 class DataController {
     
     let persistentContainer: NSPersistentContainer
-    //internal let dbURL: URL
-    //private let modelURL: URL
     
     var viewContext:NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     
     let backgroundContext: NSManagedObjectContext!
-    
-//    private let model: NSManagedObjectModel
-//    internal let savingContext: NSManagedObjectContext
-//
-//    internal let coordinator: NSPersistentStoreCoordinator
+
     static func getInstance() -> DataController {
         struct Singleton {
             static var instance = DataController(modelName: "Virtual_Tourist")
@@ -33,24 +27,9 @@ class DataController {
     }
     
     init(modelName: String) {
-       // self.modelURL = getModelUrl(name: modelName, extension: "momd")!
-        // create model from Url
-//        guard let model = NSManagedObjectModel(contentsOf: modelURL) else {
-//            print("unable to create a model from \(modelURL)")
-//            return nil
-//        }
-//        self.model = model
-//        coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-//        persistentContainer = NSPersistentContainer(name: modelName)
-//        savingContext = persistentContainer.viewContext
-//        backgroundContext = persistentContainer.newBackgroundContext()
         persistentContainer = NSPersistentContainer(name: modelName)
         backgroundContext = persistentContainer.viewContext
     }
-    
-//    func addStoreCoordinator(_ storeType: String, configuration: String?, storeURL: URL, options : [NSObject:AnyObject]?) throws {
-//        try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbURL, options: nil)
-//    }
     
     func configureContexts() {
         viewContext.automaticallyMergesChangesFromParent = true
@@ -69,13 +48,7 @@ class DataController {
             completion?()
         }
     }
-//    private func getModelUrl(name: String, extension: String) -> URL? {
-//        guard let modelUrl = Bundle.main.url(forResource: name, withExtension: "momd") else {
-//            print("Unable to find \(name) in the main bundle")
-//            return nil
-//        }
-//        return modelUrl
-//    }
+
 }
 
 // MARK: - Autosaving
@@ -99,10 +72,4 @@ extension DataController {
     }
 }
 
-//internal extension DataController {
-//    func purgeData() throws {
-//        try coordinator.destroyPersistentStore(at: dbURL, ofType: NSSQLiteStoreType, options: nil)
-//        try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
-//    }
-//}
 

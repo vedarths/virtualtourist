@@ -68,7 +68,7 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
         for photos in fetchedResultsController.fetchedObjects! {
             DataController.getInstance().viewContext.delete(photos)
         }
-        save()
+        DataController.getInstance().autoSaveViewContext()
         fetchPhotosFromAPI(locationPin!)
     }
     
@@ -140,7 +140,7 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
             performUIUpdatesOnMain {
                 if let url = photo.url {
                     _ = Photo(title: photo.title, imageUrl: url, forPin: forPin, context: DataController.getInstance().viewContext)
-                    self.save()
+                    DataController.getInstance().autoSaveViewContext()
                 }
             }
         }
@@ -198,7 +198,7 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
 
 // MARK: - MKMapViewDelegate
 
-extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -282,7 +282,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
                             }
                             photo.image = NSData(data: data)
                             DispatchQueue.global(qos: .background).async {
-                                self.save()
+                                DataController.getInstance().autoSaveViewContext()
                             }
                         }
                     }
@@ -301,7 +301,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
     }
 }
 
-extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
+extension AlbumViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         inserted = [IndexPath]()

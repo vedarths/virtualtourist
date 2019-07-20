@@ -45,8 +45,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jSX-jU-rpd" userLabel="Footer View">
                                 <rect key="frame" x="0.0" y="671" width="414" height="65"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Pins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="al7-lg-b0g">
-                                        <rect key="frame" x="163.66666666666666" y="22" width="87" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click to Remove Pins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="al7-lg-b0g">
+                                        <rect key="frame" x="127.33333333333333" y="22" width="159.66666666666669" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.97361403700000004" green="0.90542644260000005" blue="0.95958441500000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -91,10 +91,10 @@
             </objects>
             <point key="canvasLocation" x="13.043478260869566" y="133.69565217391306"/>
         </scene>
-        <!--Photo Album View Controller-->
+        <!--Album View Controller-->
         <scene sceneID="mgq-nV-QPL">
             <objects>
-                <viewController id="blm-iF-LpA" customClass="PhotoAlbumViewController" customModule="MyVVirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="blm-iF-LpA" customClass="AlbumViewController" customModule="MyVVirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8on-jq-FWC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

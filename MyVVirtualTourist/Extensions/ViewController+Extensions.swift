@@ -15,9 +15,9 @@ extension UIViewController {
         return UIApplication.shared.delegate as! AppDelegate
     }
     
-    func save() {
-       try? DataController.getInstance().autoSaveViewContext()
-    }
+//    func save() {
+//       try? DataController.getInstance().autoSaveViewContext()
+//    }
     
     func getPin(latitude: String, longitude: String) -> LocationPin? {
         let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)

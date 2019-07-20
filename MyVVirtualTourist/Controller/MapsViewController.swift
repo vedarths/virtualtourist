@@ -61,9 +61,9 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "displayAlbum") {
-          let photoAlbumViewController = segue.destination as! PhotoAlbumViewController
-          photoAlbumViewController.latitude = self.latitude
-          photoAlbumViewController.longitude = self.longitude
+          let albumViewController = segue.destination as! AlbumViewController
+          albumViewController.latitude = self.latitude
+          albumViewController.longitude = self.longitude
         }
     }
     
