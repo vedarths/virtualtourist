@@ -13,21 +13,21 @@ import CoreData
 extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        created = [IndexPath]()
-        deleted = [IndexPath]()
-        updated = [IndexPath]()
+        insertedIndexPaths = [IndexPath]()
+        deletedIndexPaths = [IndexPath]()
+        updatedIndexPaths = [IndexPath]()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch (type) {
         case .insert:
-            created.append(newIndexPath!)
+            insertedIndexPaths.append(newIndexPath!)
             break
         case .delete:
-            deleted.append(indexPath!)
+            deletedIndexPaths.append(indexPath!)
             break
         case .update:
-            updated.append(indexPath!)
+            updatedIndexPaths.append(indexPath!)
             break
         case .move:
             print("Move item.")
@@ -41,15 +41,15 @@ extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         collectionView.performBatchUpdates({() -> Void in
             
-            for indexPath in self.created {
+            for indexPath in self.insertedIndexPaths {
                 self.collectionView.insertItems(at: [indexPath])
             }
             
-            for indexPath in self.deleted {
+            for indexPath in self.deletedIndexPaths {
                 self.collectionView.deleteItems(at: [indexPath])
             }
             
-            for indexPath in self.updated {
+            for indexPath in self.updatedIndexPaths {
                 self.collectionView.reloadItems(at: [indexPath])
             }
             
@@ -69,22 +69,22 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let sectionInfo = self.fetchedResultController.sections?[section] {
+        if let sectionInfo = self.fetchedResultsController.sections?[section] {
             return sectionInfo.numberOfObjects
         }
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let photo = fetchedResultController.object(at: indexPath)
-        let photoViewCell = cell as! PhotoCell
-        photoViewCell.imageUrl = photo.imageUrl!
-        configImage(using: photoViewCell, photo: photo, collectionView: collectionView, index: indexPath)
+        let photo = self.fetchedResultsController.object(at: indexPath)
+        let photoCell = cell as! PhotoCell
+        photoCell.imageUrl = photo.imageUrl!
+        configImage(using: photoCell, photo: photo, collectionView: collectionView, index: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photoToDelete = fetchedResultController.object(at: indexPath)
-        dataController.viewContext.delete(photoToDelete)
+        let photoToDelete = fetchedResultsController.object(at: indexPath)
+        DataController.getInstance().viewContext.delete(photoToDelete)
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying: UICollectionViewCell, forItemAt: IndexPath) {
@@ -93,7 +93,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
             return
         }
         
-        let photo = fetchedResultController.object(at: forItemAt)
+        let photo = fetchedResultsController.object(at: forItemAt)
         if let imageUrl = photo.imageUrl {
             FlickerClient.sharedInstance().cancelDownload(imageUrl)
         }
@@ -134,11 +134,11 @@ extension PhotoAlbumViewController: UICollectionViewDataSource, UICollectionView
     }
     
     private func errorForImageUrl(_ imageUrl: String) {
-        if !self.alert {
+        if !self.presentingAlert {
             self.showInfo(withTitle: "Error", withMessage: "Error while fetching image for URL: \(imageUrl)", action: {
-                self.alert = false
+                self.presentingAlert = false
             })
         }
-        self.alert = true
+        self.presentingAlert = true
     }
 }

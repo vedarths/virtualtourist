@@ -6,34 +6,37 @@
 //  Copyright © 2019 Vedarth Solutions. All rights reserved.
 //
 
-import Foundation
-
 import UIKit
 import MapKit
 import CoreData
 
 class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     
-    var selected = [IndexPath]()
-    var created: [IndexPath]!
-    var deleted: [IndexPath]!
-    var updated: [IndexPath]!
-    var pages: Int? = nil
-    var alert = false
-    var latitude: String?
-    var longitude: String?
-    var locationPin : LocationPin?
-    var fetchedResultController: NSFetchedResultsController<Photo>!
-    var dataController:DataController!
+    // MARK: - Outlets
     
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout?
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var newCollectionButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var labelStatus: UILabel!
     
+    // MARK: - Variables
+    
+    var selectedIndexes = [IndexPath]()
+    var insertedIndexPaths: [IndexPath]!
+    var deletedIndexPaths: [IndexPath]!
+    var updatedIndexPaths: [IndexPath]!
+    var totalPages: Int? = nil
+    
+    var presentingAlert = false
+    
+    var fetchedResultsController: NSFetchedResultsController<Photo>!
+    var locationPin : LocationPin?
+    var latitude: String?
+    var longitude: String?
+    
+    // MARK: - UIViewController lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,61 +45,34 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
         
+        // we're setting an empty text in it.
         updateStatusLabel("")
-        let pin = getPin(latitude: latitude!, longitude: longitude!) as LocationPin?
+        let pin = getPin(latitude: latitude!, longitude: longitude!)
         showOnTheMap(pin!)
         setupFetchedResultControllerWith(pin!)
-        self.locationPin = pin!
-        print("pin is \(pin!)")
-        // let photos = pin!.photos!
-        //print("photos: \(String(describing: photos))")
-        //print("photos count is : \(photos.count)")
-        
-        //if(photos.count == 0){
-            // pin selected has no photos - get from Flickr
-        getPhotosFromFlickr(pin!)
-        //}
-    }
-    
-    
-    @IBAction func deleteCollection(_ sender: Any) {
-        for photos in fetchedResultController.fetchedObjects! {
-            DataController.getInstance().viewContext.delete(photos)
+        if let photos = pin!.photos, photos.count == 0 {
+            // pin selected has no photos
+            fetchPhotosFromAPI(pin!)
         }
-        save()
-        getPhotosFromFlickr(locationPin!)
+        self.locationPin = pin!
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateFlowLayout(size)
     }
-    fileprivate func setupFetchedResultsController() {
-        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "photos")
-        do {
-            try fetchedResultController.performFetch()
-        } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+    
+    // MARK: - Actions
+    
+    @IBAction func deleteAction(_ sender: Any) {
+        // delete all photos
+        for photos in fetchedResultsController.fetchedObjects! {
+            DataController.getInstance().viewContext.delete(photos)
         }
+        save()
+        fetchPhotosFromAPI(locationPin!)
     }
     
-    private func updateFlowLayout(_ withSize: CGSize) {
-        
-        let landscape = withSize.width > withSize.height
-        
-        let space: CGFloat = landscape ? 5 : 3
-        let items: CGFloat = landscape ? 2 : 3
-        
-        let dimension = (withSize.width - ((items + 1) * space)) / items
-        
-        flowLayout?.minimumInteritemSpacing = space
-        flowLayout?.minimumLineSpacing = space
-        flowLayout?.itemSize = CGSize(width: dimension, height: dimension)
-        flowLayout?.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
-    }
+    // MARK: - Helpers
     
     private func setupFetchedResultControllerWith(_ pin: LocationPin) {
         
@@ -104,33 +80,42 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         fr.sortDescriptors = []
         fr.predicate = NSPredicate(format: "pin == %@", argumentArray: [pin])
         
-        fetchedResultController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        // Create the FetchedResultsController
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: DataController.getInstance().viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        
+        // Start the fetched results controller
+        var error: NSError?
         do {
-            try fetchedResultController.performFetch()
-        } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error = error1
+        }
+        
+        if let error = error {
+            print("\(#function) Error performing initial fetch: \(error)")
         }
     }
     
-    private func getPhotosFromFlickr(_ pin: LocationPin) {
+    private func fetchPhotosFromAPI(_ pin: LocationPin) {
         
         let lat = Double(pin.latitude!)!
         let lon = Double(pin.longitude!)!
         
         activityIndicator.startAnimating()
-        self.updateStatusLabel("Getting photos from Flickr: ")
+        self.updateStatusLabel("Fetching photos ...")
         
-        FlickerClient.sharedInstance().findBy(latitude: lat, longitude: lon, totalPages: pages) { (photosParsed, error) in
+        FlickerClient.sharedInstance().findBy(latitude: lat, longitude: lon, totalPages: totalPages) { (photosParsed, error) in
             self.performUIUpdatesOnMain {
                 self.activityIndicator.stopAnimating()
                 self.labelStatus.text = ""
             }
             if let photosParsed = photosParsed {
-                self.pages = photosParsed.photos.pages
-                let total = photosParsed.photos.photo.count
-                print("\(#function) Downloading \(total) photos.")
+                self.totalPages = photosParsed.photos.pages
+                let totalPhotos = photosParsed.photos.photo.count
+                print("\(#function) Downloading \(totalPhotos) photos.")
                 self.storePhotos(photosParsed.photos.photo, forPin: pin)
-                if total == 0 {
+                if totalPhotos == 0 {
                     self.updateStatusLabel("No photos found for this location 😢")
                 }
             } else if let error = error {
@@ -156,7 +141,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
             performUIUpdatesOnMain {
                 if let url = photo.url {
                     _ = Photo(title: photo.title, imageUrl: url, forPin: forPin, context: DataController.getInstance().viewContext)
-                    try? DataController.getInstance().viewContext.save()
+                    self.save()
                 }
             }
         }
@@ -180,7 +165,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         let predicate = NSPredicate(format: "pin == %@", argumentArray: [pin])
         var photos: [Photo]?
         do {
-            try photos = dataController.fetchPhotos(predicate, entityName: "Photo")
+            try photos = DataController.getInstance().fetchPhotos(predicate, entityName: Photo.name)
         } catch {
             print("\(#function) error:\(error)")
             showInfo(withTitle: "Error", withMessage: "Error while lading Photos from disk: \(error)")
@@ -188,9 +173,23 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         return photos
     }
     
+    private func updateFlowLayout(_ withSize: CGSize) {
+        
+        let landscape = withSize.width > withSize.height
+        
+        let space: CGFloat = landscape ? 5 : 3
+        let items: CGFloat = landscape ? 2 : 3
+        
+        let dimension = (withSize.width - ((items + 1) * space)) / items
+        
+        flowLayout?.minimumInteritemSpacing = space
+        flowLayout?.minimumLineSpacing = space
+        flowLayout?.itemSize = CGSize(width: dimension, height: dimension)
+        flowLayout?.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
+    }
     
     func updateBottomButton() {
-        if selected.count > 0 {
+        if selectedIndexes.count > 0 {
             button.setTitle("Remove Selected", for: .normal)
         } else {
             button.setTitle("New Collection", for: .normal)
@@ -198,23 +197,13 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     }
 }
 
-private func getPin(latitude: String, longitude: String) -> LocationPin? {
-    let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)
-    var pin: LocationPin?
-    do {
-        try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
-    } catch {
-        print("\(#function) error:\(error)")
-    }
-    print(" pin in getPin is \(pin)")
-    return pin
-}
+// MARK: - MKMapViewDelegate
 
 extension PhotoAlbumViewController {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        let reuseId = "locationpin"
+        let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         
@@ -225,13 +214,7 @@ extension PhotoAlbumViewController {
         } else {
             pinView!.annotation = annotation
         }
+        
         return pinView
     }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return fetchedResultController.sections?.count ?? 0
-    }
-    
-    
 }
-

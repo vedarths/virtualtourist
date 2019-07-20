@@ -19,6 +19,18 @@ extension UIViewController {
        try? DataController.getInstance().autoSaveViewContext()
     }
     
+    func getPin(latitude: String, longitude: String) -> LocationPin? {
+        let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)
+        var pin: LocationPin?
+        do {
+            try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
+        } catch {
+            print("\(#function) error:\(error)")
+            showInfo(withTitle: "Error", withMessage: "Error while fetching location: \(error)")
+        }
+        return pin
+    }
+    
     func showInfo(withTitle: String = "Info", withMessage: String, action: (() -> Void)? = nil) {
         performUIUpdatesOnMain {
             let ac = UIAlertController(title: withTitle, message: withMessage, preferredStyle: .alert)

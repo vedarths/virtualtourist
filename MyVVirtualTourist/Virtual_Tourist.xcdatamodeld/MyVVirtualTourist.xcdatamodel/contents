@@ -3,7 +3,7 @@
     <entity name="LocationPin" representedClassName="LocationPin" syncable="YES">
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="photos" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>

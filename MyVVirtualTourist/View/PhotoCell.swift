@@ -13,7 +13,7 @@ class PhotoCell: UICollectionViewCell {
     static let identifier = "PhotoCell"
     var imageUrl: String  = ""
 
-    @IBOutlet weak var imageView: UIImageView!
-    
+
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var imageView: UIImageView!
 }

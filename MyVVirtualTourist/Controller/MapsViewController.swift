@@ -61,10 +61,9 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "displayAlbum") {
-            let photoAlbumViewController = segue.destination as! PhotoAlbumViewController
-            photoAlbumViewController.dataController = dataController
-            photoAlbumViewController.latitude = self.latitude
-            photoAlbumViewController.longitude = self.longitude
+          let photoAlbumViewController = segue.destination as! PhotoAlbumViewController
+          photoAlbumViewController.latitude = self.latitude
+          photoAlbumViewController.longitude = self.longitude
         }
     }
     
@@ -112,17 +111,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         }
     }
    
-    private func getPin(latitude: String, longitude: String) -> LocationPin? {
-        let predicate = NSPredicate(format: "latitude == %@ AND longitude == %@", latitude, longitude)
-        var pin: LocationPin?
-        do {
-            try pin = DataController.getInstance().fetchPin(predicate, entityName: "LocationPin")
-        } catch {
-            print("\(#function) error:\(error)")
-            showInfo(withTitle: "Error", withMessage: "Error while fetching location: \(error)")
-        }
-        return pin
-    }
+    
     
 }
 
