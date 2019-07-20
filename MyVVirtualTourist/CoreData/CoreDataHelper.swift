@@ -58,5 +58,12 @@ extension DataController {
         }
     }
     
+    func save(_ photo: Photo) {
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error while saving location pin: \(error)")
+        }
+    }
     
 }

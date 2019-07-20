@@ -25,6 +25,7 @@
 		BE3B804E22D9932000462282 /* FlickerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804D22D9932000462282 /* FlickerConstants.swift */; };
 		BE3B805022D994A100462282 /* FlickrClientOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B804F22D994A100462282 /* FlickrClientOperations.swift */; };
 		BE3B805222D995F500462282 /* PhotosParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3B805122D995F500462282 /* PhotosParser.swift */; };
+		BE49694722E2DAFC00CDF908 /* PhotoAlbumViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE49694622E2DAFC00CDF908 /* PhotoAlbumViewController+Extension.swift */; };
 		BE6053A922E2CFEB00D6F999 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6053A822E2CFEB00D6F999 /* Photo.swift */; };
 		BE6053AB22E2CFFB00D6F999 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6053AA22E2CFFB00D6F999 /* LocationPin.swift */; };
 		BED52EA322D9E0FB00826A83 /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED52EA222D9E0FB00826A83 /* ViewController+Extensions.swift */; };
@@ -72,6 +73,7 @@
 		BE3B804D22D9932000462282 /* FlickerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerConstants.swift; sourceTree = "<group>"; };
 		BE3B804F22D994A100462282 /* FlickrClientOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClientOperations.swift; sourceTree = "<group>"; };
 		BE3B805122D995F500462282 /* PhotosParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosParser.swift; sourceTree = "<group>"; };
+		BE49694622E2DAFC00CDF908 /* PhotoAlbumViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoAlbumViewController+Extension.swift"; sourceTree = "<group>"; };
 		BE6053A822E2CFEB00D6F999 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		BE6053AA22E2CFFB00D6F999 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
 		BED52EA222D9E0FB00826A83 /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 			children = (
 				BE05DF5922ABB9340034D627 /* MapsViewController.swift */,
 				BE1E8F8022B60E89006012C6 /* PhotoAlbumViewController.swift */,
+				BE49694622E2DAFC00CDF908 /* PhotoAlbumViewController+Extension.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				BE1E8F7F22B60E5D006012C6 /* FlickerClient.swift in Sources */,
 				BE1E8F7622B4690D006012C6 /* DataController.swift in Sources */,
 				BE6053A922E2CFEB00D6F999 /* Photo.swift in Sources */,
+				BE49694722E2DAFC00CDF908 /* PhotoAlbumViewController+Extension.swift in Sources */,
 				BE1E8F8122B60E89006012C6 /* PhotoAlbumViewController.swift in Sources */,
 				BE05DF6022ABB9340034D627 /* Virtual_Tourist.xcdatamodeld in Sources */,
 				BE6053AB22E2CFFB00D6F999 /* LocationPin.swift in Sources */,

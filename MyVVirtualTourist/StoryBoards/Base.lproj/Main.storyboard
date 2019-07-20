@@ -115,8 +115,8 @@
                                         </variation>
                                         <variation key="heightClass=compact">
                                             <mask key="constraints">
-                                                <exclude reference="lDf-ME-jre"/>
                                                 <include reference="OEC-Jc-BUB"/>
+                                                <exclude reference="lDf-ME-jre"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -133,7 +133,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="PhotoViewCell" id="hQb-6O-h5M" customClass="PhotoViewCell" customModule="Virtual_Tourist" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="PhotoViewCell" id="hQb-6O-h5M" customClass="PhotoViewCell" customModule="MyVVirtualTourist" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -141,10 +141,10 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6oL-sY-bQs">
-                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="116"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="256"/>
                                                         </imageView>
                                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="hpx-OQ-7FI">
-                                                            <rect key="frame" x="65" y="48" width="20" height="20"/>
+                                                            <rect key="frame" x="65" y="118" width="20" height="20"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                 </view>
@@ -158,8 +158,8 @@
                                                     <constraint firstItem="6oL-sY-bQs" firstAttribute="top" secondItem="hQb-6O-h5M" secondAttribute="top" id="rwi-T2-xNW"/>
                                                 </constraints>
                                                 <connections>
-                                                    <outlet property="activityIndicator" destination="hpx-OQ-7FI" id="at2-KC-JW4"/>
-                                                    <outlet property="imageView" destination="6oL-sY-bQs" id="c9U-PR-e5F"/>
+                                                    <outlet property="activityIndicator" destination="hpx-OQ-7FI" id="Q6k-sB-lUo"/>
+                                                    <outlet property="imageView" destination="6oL-sY-bQs" id="Nhq-Nw-P3n"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>

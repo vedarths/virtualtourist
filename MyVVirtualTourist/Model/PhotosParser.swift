@@ -14,10 +14,11 @@ struct PhotosParser: Codable {
 
 struct Photos: Codable {
     let pages: Int
-    let photo: [PhotosParser]
+    let photo: [PhotoParser]
 }
 
 struct PhotoParser: Codable {
+    
     let url: String?
     let title: String
     

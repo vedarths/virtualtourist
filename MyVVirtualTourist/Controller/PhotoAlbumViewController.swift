@@ -12,32 +12,18 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
-    
+class PhotoAlbumViewController: UIViewController, MKMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate  {
     
     var selected = [IndexPath]()
     var created: [IndexPath]!
     var deleted: [IndexPath]!
     var updated: [IndexPath]!
-    var totalPages: Int? = nil
+    var pages: Int? = nil
     
     var alert = false
     var locationPin: LocationPin?
-    var fetchedResultController: NSFetchedResultsController<Photo>
+    var fetchedResultController: NSFetchedResultsController<Photo>!
     var dataController:DataController!
-    
-    fileprivate func setupFetchedResultsController() {
-        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "photos")
-        do {
-            try fetchedResultController.performFetch()
-        } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
-        }
-    }
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
@@ -46,6 +32,7 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var newCollectionButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var labelStatus: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +58,18 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateFlowLayout(size)
     }
+    fileprivate func setupFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "photos")
+        do {
+            try fetchedResultController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
     
     private func updateFlowLayout(_ withSize: CGSize) {
         
@@ -93,19 +92,11 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         fr.sortDescriptors = []
         fr.predicate = NSPredicate(format: "pin == %@", argumentArray: [pin])
         
-        fetchedResultController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: DataController.shared().context, sectionNameKeyPath: nil, cacheName: nil)
-        fetchedResultController.delegate = self
-        
-        
-        var error: NSError?
+        fetchedResultController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try fetchedResultController.performFetch()
-        } catch let error1 as NSError {
-            error = error1
-        }
-        
-        if let error = error {
-            print("\(#function) Error performing initial fetch: \(error)")
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
     
@@ -115,19 +106,19 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         let lon = Double(pin.longitude!)!
         
         activityIndicator.startAnimating()
-        self.updateStatusLabel("Fetching photos ...")
+        self.updateStatusLabel("Getting photos from Flickr: ")
         
-        FlickerClient.sharedInstance().findBy(latitude: lat, longitude: lon, totalPages: totalPages) { (photosParsed, error) in
+        FlickerClient.sharedInstance().findBy(latitude: lat, longitude: lon, totalPages: pages) { (photosParsed, error) in
             self.performUIUpdatesOnMain {
                 self.activityIndicator.stopAnimating()
                 self.labelStatus.text = ""
             }
             if let photosParsed = photosParsed {
-                self.totalPages = photosParsed.photos.pages
-                let totalPhotos = photosParsed.photos.photo.count
-                print("\(#function) Downloading \(totalPhotos) photos.")
+                self.pages = photosParsed.photos.pages
+                let total = photosParsed.photos.photo.count
+                print("\(#function) Downloading \(total) photos.")
                 self.storePhotos(photosParsed.photos.photo, forPin: pin)
-                if totalPhotos == 0 {
+                if total == 0 {
                     self.updateStatusLabel("No photos found for this location 😢")
                 }
             } else if let error = error {
@@ -152,8 +143,8 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
         for photo in photos {
             performUIUpdatesOnMain {
                 if let url = photo.url {
-                    _ = Photo(context: dataController.viewContext)
-                    try? dataController.viewContext.save()
+                    _ = Photo(title: photo.title, imageUrl: url, forPin: forPin, context: DataController.getInstance().viewContext)
+                    try? DataController.getInstance().viewContext.save()
                 }
             }
         }
@@ -187,11 +178,117 @@ class PhotoAlbumViewController: UIViewController, MKMapViewDelegate {
     
     
     func updateBottomButton() {
-        if selectedIndexes.count > 0 {
+        if selected.count > 0 {
             button.setTitle("Remove Selected", for: .normal)
         } else {
             button.setTitle("New Collection", for: .normal)
         }
+    }
+}
+
+extension PhotoAlbumViewController {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let reuseId = "locationpin"
+        
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
+            pinView!.pinTintColor = .red
+        } else {
+            pinView!.annotation = annotation
+        }
+        return pinView
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return fetchedResultController.sections?.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
+        cell.imageView.image = nil
+        cell.activityIndicator.startAnimating()
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let sectionInfo = self.fetchedResultController.sections?[section] {
+            return sectionInfo.numberOfObjects
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let photo = fetchedResultController.object(at: indexPath)
+        let photoViewCell = cell as! PhotoCell
+        photoViewCell.imageUrl = photo.imageUrl!
+        configImage(using: photoViewCell, photo: photo, collectionView: collectionView, index: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photoToDelete = fetchedResultController.object(at: indexPath)
+        dataController.viewContext.delete(photoToDelete)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying: UICollectionViewCell, forItemAt: IndexPath) {
+        
+        if collectionView.cellForItem(at: forItemAt) == nil {
+            return
+        }
+        
+        let photo = fetchedResultController.object(at: forItemAt)
+        if let imageUrl = photo.imageUrl {
+            FlickerClient.sharedInstance().cancelDownload(imageUrl)
+        }
+    }
+    
+    private func configImage(using cell: PhotoCell, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
+        if let imageData = photo.image {
+            cell.activityIndicator.stopAnimating()
+            cell.imageView.image = UIImage(data: Data(referencing: imageData))
+        } else {
+            if let imageUrl = photo.imageUrl {
+                cell.activityIndicator.startAnimating()
+                FlickerClient.sharedInstance().getImage(imageUrl: imageUrl) { (data, error) in
+                    if let _ = error {
+                        self.performUIUpdatesOnMain {
+                            cell.activityIndicator.stopAnimating()
+                            self.errorForImageUrl(imageUrl)
+                        }
+                        return
+                    } else if let data = data {
+                        self.performUIUpdatesOnMain {
+                            
+                            if let currentCell = collectionView.cellForItem(at: index) as? PhotoCell {
+                                if currentCell.imageUrl == imageUrl {
+                                    currentCell.imageView.image = UIImage(data: data)
+                                    cell.activityIndicator.stopAnimating()
+                                }
+                            }
+                            photo.image = NSData(data: data)
+                            DispatchQueue.global(qos: .background).async {
+                                self.save()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func errorForImageUrl(_ imageUrl: String) {
+        if !self.alert {
+            self.showInfo(withTitle: "Error", withMessage: "Error while fetching image for URL: \(imageUrl)", action: {
+                self.alert = false
+            })
+        }
+        self.alert = true
     }
 }
 

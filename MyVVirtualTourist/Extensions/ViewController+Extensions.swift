@@ -15,6 +15,10 @@ extension UIViewController {
         return UIApplication.shared.delegate as! AppDelegate
     }
     
+    func save() {
+       try? DataController.getInstance().autoSaveViewContext()
+    }
+    
     func showInfo(withTitle: String = "Info", withMessage: String, action: (() -> Void)? = nil) {
         performUIUpdatesOnMain {
             let ac = UIAlertController(title: withTitle, message: withMessage, preferredStyle: .alert)
