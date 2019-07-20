@@ -14,3 +14,4 @@ extension Photo {
         super.awakeFromInsert()
     }
 }
+
