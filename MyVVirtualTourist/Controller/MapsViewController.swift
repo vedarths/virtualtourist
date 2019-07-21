@@ -11,7 +11,6 @@ import MapKit
 import CoreData
 
 class MapsViewController: UIViewController, MKMapViewDelegate {
-    
     @IBOutlet weak var footer: UIView!
     @IBOutlet weak var mapView: MKMapView!
     var latitude: String?
@@ -24,7 +23,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         let fetchRequest:NSFetchRequest<LocationPin> = LocationPin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "locationPins")
         do {
             try fetchedResultsController.performFetch()
@@ -60,7 +58,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "displayAlbum") {
+        if segue.identifier == "displayAlbum" {
           let albumViewController = segue.destination as! AlbumViewController
           albumViewController.latitude = self.latitude
           albumViewController.longitude = self.longitude
@@ -100,9 +98,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         if gestureRecognizer.state == UIGestureRecognizer.State.began {
             pinAnnotation = MKPointAnnotation()
             pinAnnotation!.coordinate = newCoordinates
-            
             print("\(#function) Coordinate: \(newCoordinates.latitude),\(newCoordinates.longitude)")
-            
             mapView.addAnnotation(pinAnnotation!)
         } else if gestureRecognizer.state == .changed {
             pinAnnotation!.coordinate = newCoordinates
@@ -110,18 +106,13 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             dataController.saveLocationPin(pinAnnotation!)
         }
     }
-   
-    
-    
 }
 
 extension MapsViewController {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "locationPin"
-        
         var locationPinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        
         if locationPinView == nil {
             locationPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             locationPinView!.canShowCallout = false
@@ -143,7 +134,6 @@ extension MapsViewController {
         guard let annotation = view.annotation else {
             return
         }
-        
         mapView.deselectAnnotation(annotation, animated: true)
         print("\(#function) latitude \(annotation.coordinate.latitude) longitude \(annotation.coordinate.longitude)")
         let latitudeVal = String(annotation.coordinate.latitude)
@@ -159,6 +149,5 @@ extension MapsViewController {
             self.longitude = longitudeVal
              performSegue(withIdentifier: "displayAlbum", sender: pin)
         }
-       
     }
 }

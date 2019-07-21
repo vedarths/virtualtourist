@@ -13,7 +13,6 @@ import CoreData
 class AlbumViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: - Outlets
-    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout?
@@ -22,30 +21,24 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var labelStatus: UILabel!
     
     // MARK: - Variables
-    
     var selected = [IndexPath]()
     var inserted: [IndexPath]!
     var deleted: [IndexPath]!
     var updated: [IndexPath]!
     var totalPages: Int? = nil
-    
     var presentingAlert = false
-    
     var fetchedResultsController: NSFetchedResultsController<Photo>!
     var locationPin : LocationPin?
     var latitude: String?
     var longitude: String?
     
     // MARK: - UIViewController lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateFlowLayout(view.frame.size)
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
-        
-        // we're setting an empty text in it.
         setStatusLabel("")
         let pin = getPin(latitude: latitude!, longitude: longitude!)
         showOnTheMap(pin!)
@@ -62,7 +55,6 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - Actions
-    
     @IBAction func deleteAction(_ sender: Any) {
         // delete all photos
         for photos in fetchedResultsController.fetchedObjects! {
@@ -73,17 +65,13 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - Helpers
-    
     private func setupFetchedResultControllerWith(_ pin: LocationPin) {
-        
         let fr = NSFetchRequest<Photo>(entityName: Photo.name)
         fr.sortDescriptors = []
         fr.predicate = NSPredicate(format: "pin == %@", argumentArray: [pin])
-        
         // Create the FetchedResultsController
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: DataController.getInstance().viewContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
-        
         // Start the fetched results controller
         var error: NSError?
         do {
@@ -91,22 +79,18 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
         } catch let error1 as NSError {
             error = error1
         }
-        
         if let error = error {
             print("\(#function) Error performing initial fetch: \(error)")
         }
     }
     
     private func fetchPhotosFromAPI(_ pin: LocationPin) {
-        
         let lat = Double(pin.latitude!)!
         let lon = Double(pin.longitude!)!
-        
         activityIndicator.startAnimating()
         self.setStatusLabel("Retrieving photos ...")
-        
         FlickerClient.sharedInstance().findBy(latitude: lat, longitude: lon, totalPages: totalPages) { (photosParsed, error) in
-            self.performUIUpdatesOnMain {
+            DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 self.labelStatus.text = ""
             }
@@ -126,7 +110,7 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func setStatusLabel(_ text: String) {
-        self.performUIUpdatesOnMain {
+        DispatchQueue.main.async {
             self.labelStatus.text = text
         }
     }
@@ -135,9 +119,8 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
         func showErrorMessage(msg: String) {
             showInfo(withTitle: "Error", withMessage: msg)
         }
-        
         for photo in photos {
-            performUIUpdatesOnMain {
+            DispatchQueue.main.async {
                 if let url = photo.url {
                     _ = Photo(title: photo.title, imageUrl: url, forPin: forPin, context: DataController.getInstance().viewContext)
                     DataController.getInstance().autoSaveViewContext()
@@ -147,14 +130,11 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func showOnTheMap(_ pin: LocationPin) {
-        
         let lat = Double(pin.latitude!)!
         let lon = Double(pin.longitude!)!
         let locCoord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        
         let annotation = MKPointAnnotation()
         annotation.coordinate = locCoord
-        
         mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotation(annotation)
         mapView.setCenter(locCoord, animated: true)
@@ -173,12 +153,9 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
     }
     
     private func updateFlowLayout(_ withSize: CGSize) {
-        
         let landscape = withSize.width > withSize.height
-        
         let space: CGFloat = landscape ? 5 : 3
         let items: CGFloat = landscape ? 2 : 3
-        
         let dimension = (withSize.width - ((items + 1) * space)) / items
         
         flowLayout?.minimumInteritemSpacing = space
@@ -197,15 +174,10 @@ class AlbumViewController: UIViewController, MKMapViewDelegate {
 }
 
 // MARK: - MKMapViewDelegate
-
 extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         let reuseId = "pin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
@@ -213,16 +185,13 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
         } else {
             pinView!.annotation = annotation
         }
-        
         return pinView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
         cell.imageView.image = nil
         cell.activityIndicator.startAnimating()
-        
         return cell
     }
     
@@ -246,11 +215,9 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying: UICollectionViewCell, forItemAt: IndexPath) {
-        
         if collectionView.cellForItem(at: forItemAt) == nil {
             return
         }
-        
         let photo = fetchedResultsController.object(at: forItemAt)
         if let imageUrl = photo.imageUrl {
             FlickerClient.sharedInstance().cancelDownload(imageUrl)
@@ -266,14 +233,13 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
                 cell.activityIndicator.startAnimating()
                 FlickerClient.sharedInstance().getImage(imageUrl: imageUrl) { (data, error) in
                     if let _ = error {
-                        self.performUIUpdatesOnMain {
+                        DispatchQueue.main.async {
                             cell.activityIndicator.stopAnimating()
                             self.errorForImageUrl(imageUrl)
                         }
                         return
                     } else if let data = data {
-                        self.performUIUpdatesOnMain {
-                            
+                        DispatchQueue.main.async {
                             if let currentCell = collectionView.cellForItem(at: index) as? PhotoCell {
                                 if currentCell.imageUrl == imageUrl {
                                     currentCell.imageView.image = UIImage(data: data)
@@ -302,13 +268,11 @@ extension AlbumViewController: UICollectionViewDataSource, UICollectionViewDeleg
 }
 
 extension AlbumViewController: NSFetchedResultsControllerDelegate {
-    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         inserted = [IndexPath]()
         deleted = [IndexPath]()
         updated = [IndexPath]()
     }
-    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch (type) {
         case .insert:
@@ -331,19 +295,15 @@ extension AlbumViewController: NSFetchedResultsControllerDelegate {
     // Handle controller behaviours for insertion, deletion and updates
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         collectionView.performBatchUpdates({() -> Void in
-            
             for indexPath in self.inserted {
                 self.collectionView.insertItems(at: [indexPath])
             }
-            
             for indexPath in self.deleted {
                 self.collectionView.deleteItems(at: [indexPath])
             }
-            
             for indexPath in self.updated {
                 self.collectionView.reloadItems(at: [indexPath])
             }
-            
-        }, completion: nil)
+         }, completion: nil)
     }
 }

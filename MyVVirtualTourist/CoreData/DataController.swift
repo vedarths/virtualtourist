@@ -63,7 +63,9 @@ extension DataController {
         }
         
         if viewContext.hasChanges {
-            try? viewContext.save()
+            viewContext.performAndWait {
+                try? viewContext.save()
+            }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
